@@ -1,0 +1,11 @@
+#+title: Readme
+#+author: Hans Villarroel
+#+date: 2022-03-22
+
+* Dobble
+Este repositorio almacena el Laboratorio Número 1 de Paradigmas de Programación.
+
+* Bibliografía.
+
+** [[https://mickydore.medium.com/the-dobble-algorithm-b9c9018afc52][The maths behind Dobble]]
+** [[https://mickydore.medium.com/the-dobble-algorithm-b9c9018afc52][The Dobble Algorithm]]
