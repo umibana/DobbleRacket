@@ -5,7 +5,23 @@
 ;;
 (define elementCards 4)
 
-(define (cardsSet elementos n_elementos max_cartas randomFn)
-  (for ([i (in-range 1 elementos)])
-    (display i)))
+;; (define (cardsSet elementos n_elementos max_cartas randomFn)
+;;   (for ([i (in-range 1 elementos)])
+;;     (cons i '(1))))
 
+(define (primeraCarta elementos)
+  (for/fold ([result '()])
+            ([i (in-range 1 elementos)])
+    (cons i result)))
+
+
+
+
+
+
+
+    
+
+
+
+(primeraCarta elementCards)
