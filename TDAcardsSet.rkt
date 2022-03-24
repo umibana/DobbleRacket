@@ -3,16 +3,17 @@
 ;; proporcionado por Micky Dore [https://mickydore.medium.com/the-dobble-algorithm-b9c9018afc52]
 ;;
 ;;
-(define elementCards 4)
+(define elementCards 10)
 
 ;; (define (cardsSet elementos n_elementos max_cartas randomFn)
 ;;   (for ([i (in-range 1 elementos)])
 ;;     (cons i '(1))))
 
 (define (primeraCarta elementos)
-  (for/fold ([result '()])
+  (reverse
+   (for/fold ([result '()])
             ([i (in-range 1 elementos)])
-    (cons i result)))
+    (cons i result))))
 
 
 
