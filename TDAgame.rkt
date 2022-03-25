@@ -1,1 +1,3 @@
+#lang racket
+
 (define (game))

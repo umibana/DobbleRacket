@@ -1,4 +1,4 @@
-;; #lang racket
+#lang racket
 
 ;; Funcion de seleccion aleatoria, dejada de ejemplo por pauta.
 (define m 2147483647)
