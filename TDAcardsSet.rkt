@@ -9,20 +9,34 @@
 ;;   (for ([i (in-range 1 elementos)])
 ;;     (cons i '(1))))
 
+
+;; Crea la primera carta
 (define (primeraCarta elementos)
   (reverse
    (for/fold ([result '()])
             ([i (in-range 1 elementos)])
     (cons i result))))
 
+(define (nCartas elementos)
+  (reverse
+   (for*/fold ([result '(1)])
+       ([i (in-range 1 elementos)]
+        [j (in-range 1 elementos)])
+     (cons j result)
+     (cons i result))))
+
+
+(nCartas elementCards)
 
 
 
 
 
 
-    
 
 
 
-(primeraCarta elementCards)
+
+
+
+

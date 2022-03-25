@@ -4,6 +4,8 @@
 
 Este repositorio almacena el Laboratorio Número 1 de Paradigmas de Programación.
 
+* Fecha inicio: <2022-03-19 Sat>
+
 * Bibliografía
 
 + [[https://mickydore.medium.com/the-dobble-algorithm-b9c9018afc52][The maths behind Dobble]]
