@@ -20,11 +20,21 @@
 
 (define (nCartas elementos)
   (reverse
-   (for*/fold ([result '(0)])  ;; for* = nested loops
-       ([i (in-range 1 elementos)]
-        [j (in-range 5 10)])
-     (cons j result)
-     (cons i result))))
+   (for*/fold ([result '()])  ;; for* = nested loops
+       ([j (in-range 1 elementos)]      ;
+        [k (in-range 5 10)])
+     (cons (+ (* k elementos) (+ k 1) ) result)
+     (cons j result))))
 
 
-(nCartas elementCards)
+(define (n2Cartas elementos)
+ (reverse
+  (for*/fold ([result '()])
+             ([j (in-range 1 elementos)]
+              [k (in-range 1 elementos)])
+    (cons (* (- k 1) (+ elementos 2 elementos)(modulo(+ (*(- j 1) (- k 1)) (- j 1))))result)
+    (cons j result))))
+
+
+
+(nCartas 3)
