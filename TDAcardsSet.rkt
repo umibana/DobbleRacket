@@ -10,26 +10,27 @@
 ;; Primera parte del algoritmo (creacion de primera carta)
 (define (primeraCarta n)
   (cond
-    [(= n 1) (list 1)]
-    [(> n 1) (cons (+ n 1) (primeraCarta (- n 1)))]))
+    [(= n 0) (list 1)]
+    [(> n 0) (cons (+ n 1) (primeraCarta (- n 1)))]))
 
 
 ; Segunda parte del algoritmo (Creacion de n Cartas)
 
 (define (nCartas_k n i k)
   (cond
-    [(= k 1) (list k)]
-    [(> k 1) (cons (+ (* n i ) (+ k 1)) (nCartas_k n i (- k 1)))]))
+    [(and (= i 1)(= k 1)) (list (+ (* n i ) (+ k 1)))]
+    [(= k 0) (list 1)]
+    [(> k 0) (cons (+ (* n i ) (+ k 1)) (nCartas_k n i (- k 1)))]))
 
 (define (nCartas n i k)
   (cond
-   [(= i 1) (nCartas_k n n n)]
-   [(> i 1) (cons i (nCartas n (- i 1) k))]))
+    [(= i 1) (cons 1 (nCartas_k n i n))]
+    [(> i 1) (cons (nCartas n (- i 1) k) (nCartas_k n i n))]))
 
 ;; (nCartas_k 5 5 5)
 
 (primeraCarta 3)
-(nCartas 4 4 4)
+(nCartas 3 3 3)
 
 
 
