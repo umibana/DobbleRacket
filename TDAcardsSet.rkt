@@ -6,45 +6,46 @@
 ;; El algoritmo hace uso for loops. Para la implementacion en Racket se usara recursion
 ;;
 
-(define (primeraCarta elementos)
+
+;; Primera parte del algoritmo (creacion de primera carta)
+(define (primeraCarta n)
   (cond
-    [(= elementos 1) (list 1)]
-    [(> elementos 1) (cons elementos (primeraCarta (- elementos 1)))]))
+    [(= n 1) (list 1)]
+    [(> n 1) (cons (+ n 1) (primeraCarta (- n 1)))]))
 
 
-(define (nCartas elementos i k)
-  (list 1)
-  (define (nCartas_k elementos)
-    (cond
-      [(= elementos 1) (list k)]
-      [(> elementos 1) (cons (+ (* elementos i ) (+ k 1)) (nCartas_k elementos i (- k 1)))]))
+; Segunda parte del algoritmo (Creacion de n Cartas)
+
+(define (nCartas_k n i k)
   (cond
-     [(= elementos 1) (list 1)]
-     [(> elementos 1) (cons elementos (nCartas (- elementos 1) i k))]))
+    [(= k 1) (list k)]
+    [(> k 1) (cons (+ (* n i ) (+ k 1)) (nCartas_k n i (- k 1)))]))
 
+(define (nCartas n i k)
+  (cond
+   [(= i 1) (nCartas_k n n n)]
+   [(> i 1) (cons i (nCartas n (- i 1) k))]))
 
-;; (cond
-;;   [(= elementos 1) (list 1)]
-;;   [(> elementos 1) (cons elementos (nCartas (- elementos 1)))]))
-;
-;
-(nCartas 30 30 30)
+;; (nCartas_k 5 5 5)
+
+(primeraCarta 3)
+(nCartas 4 4 4)
 
 
 
 
 ;; Funcion de ejemplo de aleatoriedad.
-(define m 2147483647)
-(define a 1103515245)
-(define c 12345)
+;; (define m 2147483647)
+;; (define a 1103515245)
+;; (define c 12345)
 
-(define randomFn (lambda (xn)
-                   (modulo (+ (* a xn) c) m)))
+;; (define randomFn (lambda (xn)
+;;                    (modulo (+ (* a xn) c) m))))
 
 
 
 ;; define (cardsSet elements numE maxC randomFn))
-;;(define (dobble! elementos)
-;; (primeraCarta elementos))
-;;   (nCartas elementos)
-;;   (n2Cartas elementos))
+;;(define (dobble! n)
+;; (primeraCarta n))
+;;   (nCartas n)
+;;   (n2Cartas n))
