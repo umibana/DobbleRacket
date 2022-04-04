@@ -35,27 +35,21 @@
 ; Define la operacion del algoritmo para que no quede tan largo dentro de la funcion
 (define n2Algoritmo
   (lambda (n i j k) (+(+ (* n (- k 1)) (+ n 2))(modulo (+ (* (- i 1) (- k 1))(- j 1) )n))))
-
-
+; loop k
 (define (n2Cartas_k n i j k)
   (cond
-    [(= k 1) (cons (+ i 1) (list (n2Algoritmo n i j k)))]
+    [(= k 1) (cons (n2Algoritmo n i j k) (list (+ i 1)))]
     [(> k 1) (cons (n2Algoritmo n i j k ) (n2Cartas_k n i j (- k 1)))]))
-
-; Segundo loop
+; loop j
 (define (n2Cartas_j n i j k)
   (cond
-    [(= j 0) (cons (+ i 1)(n2Cartas_k n i j n))]
-    [(> j 0) (cons (n2Cartas_j n i (- j 1) n) (+ i 1))]))
-
-; Primer loop
+    [(= j 1) (n2Cartas_k n i j n)]
+    [(> j 1) (cons (n2Cartas_j n i (- j 1) k) (n2Cartas_k n i j k))]))
+; loop i
 (define (n2Cartas n i j k)
   (cond
-    [(= i 0) (cons 1 (n2Cartas_j n (+ i 1) n n))]
-    [(> i 0) (cons (n2Cartas n (- i 1) j k) (n2Cartas_j n i n n))]))
-
-(flatten(n2Cartas 3 3 3 3))
-
+    [(= i 1) (n2Cartas_j n i n n)]
+    [(> i 1) (cons (n2Cartas n (- i 1) n n) (n2Cartas_j n i n n))]))
 
 
 
