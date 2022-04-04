@@ -4,6 +4,15 @@
 ;; El algoritmo hace uso for loops. Para la implementacion en Racket se usara recursion
 #lang racket
 
+;;Funcion de ejemplo de aleatoriedad.
+(define m 2147483647)
+(define a 1103515245)
+(define c 12345)
+
+(define randomFn (lambda (xn)
+                   (modulo (+ (* a xn) c) m)))
+
+
 ;; Primera parte del algoritmo (creacion de primera carta)
 (define (primeraCarta n)
   (cond
@@ -52,29 +61,26 @@
     [(> i 1) (cons (n2Cartas n (- i 1) n n) (n2Cartas_j n i n n))]))
 
 
+;; Funcion para separar la lista segun n elementos
+(define (split-by lst n)
+   (if (not (empty? lst))
+       (cons (take lst n) (split-by (drop lst n) n))
+       '()))
 
-;; (flatten(append(reverse(primeraCarta 3))(reverse(nCartas 3 3 3))))
+(define creacionMazo (lambda (ordenPlano)
+                       (append(flatten(primeraCarta ordenPlano))
+                        (append(flatten(nCartas ordenPlano ordenPlano ordenPlano))
+                         (flatten(n2Cartas ordenPlano ordenPlano ordenPlano ordenPlano))))))
+
+(define ordenarMazo (lambda (ordenPlano)
+                      (split-by (creacionMazo ordenPlano) (+ ordenPlano 1))))
+
+
+(ordenarMazo 7)
 
 
 
-;; (1 1 11 9
-;;  7 1 2 12
-;;  13 11 2 13
-;;  10 7 2 4 11
-;;  12 13 3 12
-;;  8 7 3 3
-;;  13 11 12 4
-;;  11 9 7 4
-;;  2 12 13 11)
 
-
-;; Funcion de ejemplo de aleatoriedad.
-;; (define m 2147483647)
-;; (define a 1103515245)
-;; (define c 12345)
-
-;; (define randomFn (lambda (xn)
-;;                    (modulo (+ (* a xn) c) m))))
 
 
 
