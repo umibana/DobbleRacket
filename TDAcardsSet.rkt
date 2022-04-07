@@ -62,30 +62,32 @@
 
 
 ;; Funcion para separar la lista segun n elementos
-(define (split-by lst n)
-   (if (not (empty? lst))
-       (cons (take lst n) (split-by (drop lst n) n))
-       '()))
+(define (ordenarEn lst n)
+  (if (not (empty? lst))
+      (cons (take lst n) (ordenarEn (drop lst n) n))
+      '()))
 
-(define creacionMazo (lambda (ordenPlano)
-                       (append(flatten(primeraCarta ordenPlano))
-                        (append(flatten(nCartas ordenPlano ordenPlano ordenPlano))
-                         (flatten(n2Cartas ordenPlano ordenPlano ordenPlano ordenPlano))))))
+(define aplanarMazo (lambda (ordenPlano)
+                      (append(flatten(primeraCarta ordenPlano))
+                             (append(flatten(nCartas ordenPlano ordenPlano ordenPlano))
+                                    (flatten(n2Cartas ordenPlano ordenPlano ordenPlano ordenPlano))))))
+
+(define armarMazo (lambda (elements)
+                    (cond
+                      [(integer? elements) (aplanarMazo elements)]
+                      [(list? elements) (aplanarMazo (length elements))]
+                      [else (error "error: ingrese elementos validos")])))
+
 
 (define ordenarMazo (lambda (ordenPlano)
-                      (split-by (creacionMazo ordenPlano) (+ ordenPlano 1))))
+                     (ordenarEn (aplanarMazo ordenPlano) (+ ordenPlano 1))))
 
+(define (numCards lst) (length lst))
 
-(ordenarMazo 7)
-
-
-
+(ordenarMazo 3)
 
 
 
 
 ;; define (cardsSet elements numE maxC randomFn))
 ;;(define (dobble! n)
-;; (primeraCarta n))
-;;   (nCartas n)
-;;   (n2Cartas n))
