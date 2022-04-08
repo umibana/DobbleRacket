@@ -62,10 +62,7 @@
 
 
 ;; Funcion para separar la lista segun n elementos
-(define (ordenarEn lst n)
-  (if (not (empty? lst))
-      (cons (take lst n) (ordenarEn (drop lst n) n))
-      '()))
+
 
 (define aplanarMazo (lambda (ordenPlano)
                       (append(flatten(primeraCarta ordenPlano))
@@ -78,16 +75,45 @@
                       [(list? elements) (aplanarMazo (length elements))]
                       [else (error "error: ingrese elementos validos")])))
 
+;; Parte de cardsSet->String
+;; Recursion natural
+(define (ordenarEn lst n)
+  (cond
+    [(not (empty? lst)) (cons (take lst n) (ordenarEn (drop lst n) n))]
+    [else '()]))
 
 (define ordenarMazo (lambda (ordenPlano)
-                     (ordenarEn (aplanarMazo ordenPlano) (+ ordenPlano 1))))
-
-(define (numCards lst) (length lst))
-
-(ordenarMazo 3)
+                      (ordenarEn (aplanarMazo ordenPlano) (+ ordenPlano 1))))
 
 
+(define (remplazarCartas buscar remplazo list)
+  (cond
+    [(null? list) '()]
+    [(list? (car list))
+     (cons (remplazarCartas buscar remplazo (cdr list))
+           (remplazarCartas buscar remplazo (cdr list)))]
+    [(equal? buscar (car list)) (cons remplazo (remplazarCartas buscar remplazo (cdr list)))]
+    [else (cons (car list)
+                (remplazarCartas buscar remplazo (cdr list)))]))
+  
 
 
-;; define (cardsSet elements numE maxC randomFn))
-;;(define (dobble! n)
+  ;; (define (numCards lst) (length lst))
+  ;; (define (nthCard lst nth) (list-ref lst nth)))
+
+
+
+
+
+
+  ;; (define (dobble? dobble))
+
+  ;; (define (outputListData lst [i 0])
+  ;;   (cond
+  ;;     [(null? lst) i]
+  ;;     [else (printf "Carta:~s\n" (first lst))
+  ;;           (outputListData (rest lst ) (+ i 1))])) ;
+
+
+  ;; define (cardsSet elements numE maxC randomFn))
+  ;;(define (dobble! n)
