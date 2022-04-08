@@ -86,34 +86,42 @@
                       (ordenarEn (aplanarMazo ordenPlano) (+ ordenPlano 1))))
 
 
-(define (remplazarCartas buscar remplazo list)
+(define (remplazarCartas buscar remplazo carta)
   (cond
-    [(null? list) '()]
-    [(list? (car list))
-     (cons (remplazarCartas buscar remplazo (cdr list))
-           (remplazarCartas buscar remplazo (cdr list)))]
-    [(equal? buscar (car list)) (cons remplazo (remplazarCartas buscar remplazo (cdr list)))]
-    [else (cons (car list)
-                (remplazarCartas buscar remplazo (cdr list)))]))
-  
+    [(null? carta) '()]
+    [(list? (car carta))
+     (cons (remplazarCartas buscar remplazo (cdr carta))
+           (remplazarCartas buscar remplazo (cdr carta)))]
+    [(equal? buscar (car carta)) (cons remplazo (remplazarCartas buscar remplazo (cdr carta)))]
+    [else (cons (car carta)
+                (remplazarCartas buscar remplazo (cdr carta)))]))
+
+(define remplazarMazo
+  (lambda (simbolos mazo [i 0])
+     (cond
+        [(= (+ i 1) (length simbolos)) (remplazarCartas (+ i 1) (list-ref simbolos i) mazo)]
+        [else (remplazarMazo simbolos  (remplazarCartas (+ i 1) (list-ref simbolos i) mazo) (+ i 1))])))
 
 
-  ;; (define (numCards lst) (length lst))
-  ;; (define (nthCard lst nth) (list-ref lst nth)))
+(ordenarEn (remplazarMazo (list "A" "B" "C" "D" "E" "f" "G") (armarMazo 2)) 3)
+
+
+;; (define (numCards lst) (length lst))
+;; (define (nthCard lst nth) (list-ref lst nth)))
 
 
 
 
 
 
-  ;; (define (dobble? dobble))
-
-  ;; (define (outputListData lst [i 0])
-  ;;   (cond
-  ;;     [(null? lst) i]
-  ;;     [else (printf "Carta:~s\n" (first lst))
-  ;;           (outputListData (rest lst ) (+ i 1))])) ;
 
 
-  ;; define (cardsSet elements numE maxC randomFn))
-  ;;(define (dobble! n)
+;; (define (outputListData lst [i 0])))
+;;   (cond
+;;     [(null? lst) i]
+;;     [else (printf "Carta:~s\n" (first lst))
+;;           (outputListData (rest lst ) (+ i 1))])) ;
+
+
+;; define (cardsSet elements numE maxC randomFn))
+;;(define (dobble! n)
