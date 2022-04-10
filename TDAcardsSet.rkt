@@ -64,16 +64,12 @@
 ;; Funcion para separar la lista segun n elementos
 
 
-(define aplanarMazo (lambda (ordenPlano)
-                      (append(flatten(primeraCarta ordenPlano))
-                             (append(flatten(nCartas ordenPlano ordenPlano ordenPlano))
-                                    (flatten(n2Cartas ordenPlano ordenPlano ordenPlano ordenPlano))))))
+(define aplanarMazo
+  (lambda (ordenPlano)
+    (append(flatten(primeraCarta ordenPlano))
+           (append(flatten(nCartas ordenPlano ordenPlano ordenPlano))
+                  (flatten(n2Cartas ordenPlano ordenPlano ordenPlano ordenPlano))))))
 
-(define armarMazo (lambda (elements)
-                    (cond
-                      [(integer? elements) (aplanarMazo elements)]
-                      [(list? elements) (aplanarMazo (length elements))]
-                      [else (error "error: ingrese elementos validos")])))
 
 ;; Parte de cardsSet->String
 ;; Recursion natural
@@ -92,36 +88,62 @@
     [(list? (car carta))
      (cons (remplazarCartas buscar remplazo (cdr carta))
            (remplazarCartas buscar remplazo (cdr carta)))]
-    [(equal? buscar (car carta)) (cons remplazo (remplazarCartas buscar remplazo (cdr carta)))]
+    [(equal? buscar (car carta))
+     (cons remplazo
+           (remplazarCartas buscar remplazo (cdr carta)))]
     [else (cons (car carta)
                 (remplazarCartas buscar remplazo (cdr carta)))]))
+
 
 (define remplazarMazo
   (lambda (simbolos mazo [i 0])
      (cond
-        [(= (+ i 1) (length simbolos)) (remplazarCartas (+ i 1) (list-ref simbolos i) mazo)]
-        [else (remplazarMazo simbolos  (remplazarCartas (+ i 1) (list-ref simbolos i) mazo) (+ i 1))])))
+       [(= (+ i 1) (length simbolos))
+        (remplazarCartas (+ i 1) (list-ref simbolos i) mazo)]
+       [else (remplazarMazo simbolos
+                            (remplazarCartas (+ i 1) (list-ref simbolos i) mazo)
+                            (+ i 1))])))
 
-
-(ordenarEn (remplazarMazo (list "A" "B" "C" "D" "E" "f" "G") (armarMazo 2)) 3)
-
-
-;; (define (numCards lst) (length lst))
-;; (define (nthCard lst nth) (list-ref lst nth)))
-
-
-
-
+(define armarMazo
+  (lambda (elementos)
+    (cond
+      [(integer? elementos) (ordenarMazo elementos)]
+      [else (error "error: ingrese elementos validos")])))
 
 
 
 
-;; (define (outputListData lst [i 0])))
-;;   (cond
-;;     [(null? lst) i]
-;;     [else (printf "Carta:~s\n" (first lst))
-;;           (outputListData (rest lst ) (+ i 1))])) ;
+(define (cardsSet [elementos 0] [numE 8] [maxC 57])
+  (cond
+    [(list? elementos)
+     (cond
+        [(or (> maxC (+(* numE (- numE 1))))(negative? maxC))
+         (ordenarEn (remplazarMazo elementos (aplanarMazo (- numE 1))) numE)]
+        [else
+         (take(ordenarEn (remplazarMazo elementos (aplanarMazo (- numE 1))) numE)maxC)])]
+    [else
+      (cond
+        [(or (> maxC (+(* numE (- numE 1))))(negative? maxC))
+         (armarMazo (- numE 1))]
+        [else (take (armarMazo (- numE 1))maxC)])]))
 
 
-;; define (cardsSet elements numE maxC randomFn))
-;;(define (dobble! n)
+
+
+(define (cardsSet->string mazo [i 1])
+  (cond
+    [(null? mazo) (printf "Mazo Actual")]
+    [else (printf "Carta ~a: ~s\n" i (car mazo))
+          (cardsSet->string (cdr mazo ) (+ i 1))])) ;
+
+(define (numCards lst) (length lst))
+(define (nthCard lst nth) (list-ref lst nth))
+
+(define findTotalCards)
+(define requiredElements)
+
+
+(define game)
+
+
+;;(define (dobble? n)
