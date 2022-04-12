@@ -4,6 +4,7 @@
 ;; El algoritmo hace uso for loops. Para la implementacion en Racket se usara recursion
 #lang racket
 
+(provide cardsSet cardsSet->string)
 ;;Funcion de ejemplo de aleatoriedad.
 (define m 2147483647)
 (define a 1103515245)
@@ -29,11 +30,13 @@
 (define nAlgoritmo
   (lambda (n i j)(+ (* n i ) (+ j 1))))
 
+
 (define (nCartas_j n i j)
   (cond
     [(and (= i 1)(= j 1)) (list (nAlgoritmo n i j))]
     [(= j 0) (list 1)]
     [(> j 0) (cons (nAlgoritmo n i j) (nCartas_j n i (- j 1)))]))
+
 
 (define (nCartas n i j)
   (cond
@@ -61,12 +64,9 @@
     [(> i 1) (cons (n2Cartas n (- i 1) n n) (n2Cartas_j n i n n))]))
 
 
-;; Funcion para separar la lista segun n elementos
-
-
 (define aplanarMazo
   (lambda (ordenPlano)
-    (append(flatten(primeraCarta ordenPlano))
+    (append(flatten(reverse(primeraCarta ordenPlano)))
            (append(flatten(nCartas ordenPlano ordenPlano ordenPlano))
                   (flatten(n2Cartas ordenPlano ordenPlano ordenPlano ordenPlano))))))
 
@@ -80,7 +80,6 @@
 
 (define ordenarMazo (lambda (ordenPlano)
                       (ordenarEn (aplanarMazo ordenPlano) (+ ordenPlano 1))))
-
 
 (define (remplazarCartas buscar remplazo carta)
   (cond
@@ -104,13 +103,12 @@
                             (remplazarCartas (+ i 1) (list-ref simbolos i) mazo)
                             (+ i 1))])))
 
+
 (define armarMazo
   (lambda (elementos)
     (cond
       [(integer? elementos) (ordenarMazo elementos)]
       [else (error "error: ingrese elementos validos")])))
-
-
 
 
 (define (cardsSet [elementos 0] [numE 8] [maxC 57])
@@ -128,6 +126,11 @@
         [else (take (armarMazo (- numE 1))maxC)])]))
 
 
+(define (dobble? mazo)
+  (cond
+    [(and
+      (= (numCards mazo) (+ 1 (*(length (car mazo)) (- (length (car mazo)) 1))))
+      (!=))]))
 
 
 (define (cardsSet->string mazo [i 1])
@@ -136,14 +139,28 @@
     [else (printf "Carta ~a: ~s\n" i (car mazo))
           (cardsSet->string (cdr mazo ) (+ i 1))])) ;
 
-(define (numCards lst) (length lst))
-(define (nthCard lst nth) (list-ref lst nth))
+(define (numCards mazo) (length mazo))
+(define (nthCard mazo nth) (list-ref mazo nth))
 
-(define findTotalCards)
-(define requiredElements)
+(define (findTotalCards carta)
+  (printf "Se necesitan ~a cartas para un mazo válido"
+     (numCards
+      (cardsSet 0 (length carta)))))
+
+(define (requiredElements carta)
+  (printf "Se necesitaran ~a elementos en total para un conjunto válido"
+    (length
+      (cardsSet 0 (length carta)))))
+
+;; Falta implementar correctamente
+(define (missingCards mazo)
+     (remove mazo (cardsSet mazo (length mazo))))
 
 
-(define game)
+
+
+
+
 
 
 ;;(define (dobble? n)

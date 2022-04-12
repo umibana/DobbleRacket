@@ -1,11 +1,8 @@
 #lang racket
 
-;; (define (game))
+(provide game stackMode)
+;; (define (game numPlayers cardsSet mode))
 
 
-(define (recursion n)
-  (if  (= n 1)
-       1
-       (* n (recursion (- n 1)))))
-
-(list 1 2 3)
+(define (stackMode mazo)
+  (drop mazo (- (length mazo) 2)))
