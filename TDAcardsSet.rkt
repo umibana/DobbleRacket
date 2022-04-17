@@ -4,7 +4,7 @@
 ;; El algoritmo hace uso for loops. Para la implementacion en Racket se usara recursion
 #lang racket
 
-(provide cardsSet cardsSet->string)
+(provide cardsSet dobble? numCards nthCard findTotalCards requiredElements missingCards cardsSet->string)
 ;;Funcion de ejemplo de aleatoriedad.
 (define m 2147483647)
 (define a 1103515245)
@@ -134,36 +134,41 @@
                            (remplazarCartas (+ i 1) (list-ref simbolos i) mazo)
                            (+ i 1))])))
 
-;; Descripcion: Funcion para facilitar uso de ordenarMazo
-;; Dominio: Int
+;; Descripcion: Funcion para randomizar lugares de las cartas
+;; Dominio: Funcion (randomFn) y lista de listas (cardsSet)
 ;; Recorrido: Lista de listas
-;; Tipo de Recursion: No se usa recursion
+;; Tipo de Recursion: Recursion natural
 
-(define armarMazo
-  (lambda (elementos)
-    (cond
-      [(integer? elementos) (ordenarMazo elementos)]
-      [else (error "error: ingrese elementos validos")])))
+(define (randomizarCartas funcion mazo)
+  (define disminuir (lambda (x) (modulo x 60)))
+  (cond
+    [(not(pair? mazo)) '()]
+    [(< (disminuir (funcion(length mazo))) (length mazo)) (append (car mazo) (randomizarCartas funcion (cdr mazo)))]
+    [(>= (disminuir (funcion(length mazo)))(length mazo)) (append (randomizarCartas funcion (cdr mazo))(car mazo))]))
+
+
+    
 
 ;; Descripcion: Funcion que generara el mazo de cartas para jugar Dobble.
 ;; Dominio: Lista o int, int, int, Funcion
 ;; Recorrido: Lista de listas
 ;; Tipo de Recursion: No se hace uso de recursion
 
-(define (cardsSet elementos numE maxC)
+(define (cardsSet elementos numE maxC rndFn)
   (cond
     [(list? elementos)
      (cond
        [(or (> maxC (+(* numE (- numE 1))))(negative? maxC))
-        (ordenarEn (remplazarMazo elementos (aplanarMazo (- numE 1))0) numE)]
+        (ordenarEn(randomizarCartas rndFn(ordenarEn (remplazarMazo elementos (aplanarMazo (- numE 1))0) numE))numE)]
        [else
-        (take(ordenarEn (remplazarMazo elementos (aplanarMazo (- numE 1))0) numE)maxC)])]
+        (take(ordenarEn(randomizarCartas rndFn(ordenarEn (remplazarMazo elementos (aplanarMazo (- numE 1))0) numE))numE)maxC)])]
     [else
      (cond
        [(or (> maxC (+(* numE (- numE 1))))(negative? maxC))
-        (armarMazo (- numE 1))]
-       [else (take (armarMazo (- numE 1))maxC)])]))
+        (ordenarEn(randomizarCartas rndFn(ordenarEn (aplanarMazo (- numE 1))numE))numE)]
+       [else (take (ordenarEn(randomizarCartas rndFn(ordenarEn (aplanarMazo (- numE 1)) numE))numE)maxC)])]))
 
+;; Pertenencia
 ;; Descripcion: Funcion que verificara si el mazo dado es valido para jugar Dobble
 ;;
 ;; Dominio: Lista de listas
@@ -177,6 +182,14 @@
       (empty? (set-subtract (cardsSet 0 (length (car mazo))) mazo))) (printf "Conjunto Valido")] ;; reviso que no se repitan
     [else printf "Conjunto no valido"]))
 
+;; Tipo de Funcion:Selector
+;; Descripcion: Funcion que entregar la n-ava carta del mazo
+;; Dominio: Lista de listas, int
+;; Recorrido: lista
+;; Tipo de Recursion: No se hace uso de recursion
+(define (nthCard mazo nth) (list-ref mazo nth))
+
+;; Tipo de Funcion: Otras Funciones
 ;; Descripcion: Funcion que entregara el numero de cartas en el mazo ingresado
 ;; Dominio: Lista de listas (cardsSet)
 ;; Recorrido: Int
@@ -184,12 +197,8 @@
 
 (define (numCards mazo) (length mazo))
 
-;; Descripcion: Funcion que entregar la n-ava carta del mazo
-;; Dominio: Lista de listas, int
-;; Recorrido: lista
-;; Tipo de Recursion: No se hace uso de recursion
-(define (nthCard mazo nth) (list-ref mazo nth))
 
+;; Tipo de Funcion: Otras Funciones
 ;; Descripcion: Funcion que entrega el numero de cartas totales necesarias para armar un mazo de Dobble
 ;; valido recibiendo una carta de muestra
 ;; Dominio: Lista
@@ -201,6 +210,7 @@
           (numCards
            (cardsSet 0 (length carta)))))
 
+;; Tipo de Funcion: Otras Funciones
 ;; Descripcion: Funcion que entrega el numero de simbolos totales necesarios para armar un mazo de Dobble
 ;; valido recibiendo una carta de muestra
 ;; Dominio:
@@ -212,25 +222,25 @@
           (length
                  (cardsSet 0 (length carta)))))
 
+;; Tipo de Funcion: Otras Funciones
 ;; Descripcion: Encuentra las cartas que faltan para armar un mazo valido de dobble dado un conjunto de muestra
 ;; Dominio: Lista de listas (cardsSet)
 ;; Recorrido: Lista de listas
 ;; Tipo de Recursion: No se hace uso de recursion
 
-;; Falta implementar correctamente
 (define (missingCards mazo)
   (set-subtract (cardsSet 0 (length (nthCard mazo 0))) mazo))
 
 
+;; Tipo de Funcion: Modificador
 ;; Descripcion: Transformara el mazo a una representacion en strings
 ;; Dominio: Lista de listas (cardsSet)
 ;; Recorrido: String
 ;; Tipo de Recursion: Recursion Natural
-(define (cardsSet->string mazo [i 1])
+(define (cardsSet->string mazo)
   (cond
-    [(null? mazo) (printf "Mazo Actual")]
-    [else (printf "Carta ~v: ~s\n" i (string-join (map ~a (car mazo)) " "))
-          (cardsSet->string (cdr mazo ) (+ i 1))]))
+    [(null? mazo) "Mazo Actual"]
+    [else (printf "Carta ~v: ~s\n" (length mazo) (string-join (map ~a (car mazo)) " "))
+          (cardsSet->string (cdr mazo))]))
 
 
-(cardsSet (list "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n") 3 -1)
