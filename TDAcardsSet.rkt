@@ -73,8 +73,8 @@
       [(> j 1) (cons (n2Cartas_j n i (- j 1) k) (n2Cartas_k n i j k))]))
 
   (cond  ;; loop i
-     [(= i 1) (n2Cartas_j n i n n)]
-     [(> i 1) (cons (n2Cartas n (- i 1) n n) (n2Cartas_j n i n n))]))
+    [(= i 1) (n2Cartas_j n i n n)]
+    [(> i 1) (cons (n2Cartas n (- i 1) n n) (n2Cartas_j n i n n))]))
 
 
 ;; Descripcion: Funcion para poder dejar todo el mazo en una sola lista
@@ -164,20 +164,6 @@
 
 
 ;; ---------------------------------------------- Constructor CardsSet -----------------------------------------------------------------
-;; Tipo de Funcion: Pertenencia
-;; Descripcion: Funcion que verificara si el mazo dado es valido para jugar Dobble
-;;
-;; Dominio: Lista de listas
-;; Recorrido: Booleano y string
-;; Tipo de Recursion:
-
-(define (dobble? mazo)
-  (cond
-    [(and
-      (= (numCards mazo) (+ 1 (*(length (car mazo)) (- (length (car mazo)) 1)))) ;; Reviso si tiene la cantidad de cartas necesarias
-      (empty? (set-subtract (cardsSet 0 (length (car mazo))) mazo))) (printf "Conjunto Valido")] ;; reviso que no se repitan
-    [else printf "Conjunto no valido"]))
-
 ;; Tipo de Funcion: Selector
 ;; Descripcion: Funcion que entregar la n-ava carta del mazo
 ;; Dominio: Lista de listas, int
@@ -192,6 +178,23 @@
 ;; Tipo de Recursion: No se hace uso de recursion
 
 (define (numCards mazo) (length mazo))
+
+;; Tipo de Funcion: Pertenencia
+;; Descripcion: Funcion que verificara si el mazo dado es valido para jugar Dobble
+;;
+;; Dominio: Lista de listas
+;; Recorrido: string
+;; Tipo de Recursion: Recursion natural
+
+(define (dobble? mazo)
+    (define (noRepite? mazo)
+        (cond
+            [(= 1(length mazo)) "Valido"]
+            [(= 1 (length(set-intersect (car mazo) (car(cdr mazo))))) (noRepite? (cdr mazo))]
+            [else "No valido"]))
+    (cond
+     [(= (numCards mazo) (+ 1 (*(length (car mazo))  (- (length (car mazo)) 1)))) (noRepite? mazo)]
+     [else "Conjunto no valido"]))
 
 
 ;; Tipo de Funcion: Otras Funciones
@@ -239,6 +242,3 @@
     [else (printf "Carta ~v: ~s\n" (length mazo) (string-join (map ~a (car mazo)) " "))
           (cardsSet->string (cdr mazo))]))
 
-
-
-(cardsSet (list "A" "B" "C" "D" "F" "G" "H" "I" "J" "K" "L" "M" "N") 4 10 randomFn)
