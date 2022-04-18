@@ -13,6 +13,7 @@
 (define randomFn (lambda (xn)
                    (modulo (+ (* a xn) c) m)))
 
+;; ---------------------------------------------- Constructor CardsSet -----------------------------------------------------------------
 ;; Constructores
 ;;
 ;; Descripicion: Generar la primera carta del mazo
@@ -58,20 +59,20 @@
 ;; Tipo de Recursion: Recursion natural
 (define (n2Cartas n i j k)
 
- (define n2Algoritmo      ;; Algoritmo para la creacion de cartas
-   (lambda (n i j k) (+(+ (* n (- k 1)) (+ n 2))(modulo (+ (* (- i 1) (- k 1))(- j 1) )n))))
+  (define n2Algoritmo      ;; Algoritmo para la creacion de cartas
+    (lambda (n i j k) (+(+ (* n (- k 1)) (+ n 2))(modulo (+ (* (- i 1) (- k 1))(- j 1) )n))))
 
- (define (n2Cartas_k n i j k) ;; loop k
-   (cond
-     [(= k 1) (cons (n2Algoritmo n i j k) (list (+ i 1)))]
-     [(> k 1) (cons (n2Algoritmo n i j k ) (n2Cartas_k n i j (- k 1)))]))
+  (define (n2Cartas_k n i j k) ;; loop k
+    (cond
+      [(= k 1) (cons (n2Algoritmo n i j k) (list (+ i 1)))]
+      [(> k 1) (cons (n2Algoritmo n i j k ) (n2Cartas_k n i j (- k 1)))]))
 
- (define (n2Cartas_j n i j k) ;; loop j
-   (cond
-     [(= j 1) (n2Cartas_k n i j n)]
-     [(> j 1) (cons (n2Cartas_j n i (- j 1) k) (n2Cartas_k n i j k))]))
+  (define (n2Cartas_j n i j k) ;; loop j
+    (cond
+      [(= j 1) (n2Cartas_k n i j n)]
+      [(> j 1) (cons (n2Cartas_j n i (- j 1) k) (n2Cartas_k n i j k))]))
 
- (cond  ;; loop i
+  (cond  ;; loop i
      [(= i 1) (n2Cartas_j n i n n)]
      [(> i 1) (cons (n2Cartas n (- i 1) n n) (n2Cartas_j n i n n))]))
 
@@ -95,13 +96,6 @@
   (cond
     [(not (empty? mazo)) (cons (take mazo n) (ordenarEn (drop mazo n) n))]
     [else '()]))
-
-;; Descripcion: Funcion para facilitar uso de ordenarEn
-;; Dominio: Int
-;; Recorrido: Lista de listas
-;; Tipo de Recursion: No se hace uso de recursion
-(define ordenarMazo (lambda (ordenPlano)
-                            (ordenarEn (aplanarMazo ordenPlano) (+ ordenPlano 1))))
 
 ;; Descripcion: Funcion que buscara un elemento en una lista y lo remplazara por el indicado
 ;; Dominio: String o Int, Lista
@@ -147,8 +141,8 @@
     [(>= (disminuir (funcion(length mazo)))(length mazo)) (append (randomizarCartas funcion (cdr mazo))(car mazo))]))
 
 
-    
 
+;; Tipo de Funcion: Constructor
 ;; Descripcion: Funcion que generara el mazo de cartas para jugar Dobble.
 ;; Dominio: Lista o int, int, int, Funcion
 ;; Recorrido: Lista de listas
@@ -168,7 +162,9 @@
         (ordenarEn(randomizarCartas rndFn(ordenarEn (aplanarMazo (- numE 1))numE))numE)]
        [else (take (ordenarEn(randomizarCartas rndFn(ordenarEn (aplanarMazo (- numE 1)) numE))numE)maxC)])]))
 
-;; Pertenencia
+
+;; ---------------------------------------------- Constructor CardsSet -----------------------------------------------------------------
+;; Tipo de Funcion: Pertenencia
 ;; Descripcion: Funcion que verificara si el mazo dado es valido para jugar Dobble
 ;;
 ;; Dominio: Lista de listas
@@ -182,7 +178,7 @@
       (empty? (set-subtract (cardsSet 0 (length (car mazo))) mazo))) (printf "Conjunto Valido")] ;; reviso que no se repitan
     [else printf "Conjunto no valido"]))
 
-;; Tipo de Funcion:Selector
+;; Tipo de Funcion: Selector
 ;; Descripcion: Funcion que entregar la n-ava carta del mazo
 ;; Dominio: Lista de listas, int
 ;; Recorrido: lista
@@ -208,7 +204,7 @@
 (define (findTotalCards carta)
   (printf "Se necesitan ~a cartas para un mazo válido\n"
           (numCards
-           (cardsSet 0 (length carta)))))
+           (cardsSet 0 (length carta) -1 randomFn))))
 
 ;; Tipo de Funcion: Otras Funciones
 ;; Descripcion: Funcion que entrega el numero de simbolos totales necesarios para armar un mazo de Dobble
@@ -220,7 +216,7 @@
 (define (requiredElements carta)
   (printf "Se necesitaran ~a elementos en total para un conjunto válido\n"
           (length
-                 (cardsSet 0 (length carta)))))
+           (cardsSet 0 (length carta) -1 randomFn))))
 
 ;; Tipo de Funcion: Otras Funciones
 ;; Descripcion: Encuentra las cartas que faltan para armar un mazo valido de dobble dado un conjunto de muestra
@@ -229,7 +225,7 @@
 ;; Tipo de Recursion: No se hace uso de recursion
 
 (define (missingCards mazo)
-  (set-subtract (cardsSet 0 (length (nthCard mazo 0))) mazo))
+  (set-subtract (cardsSet 0 (length (nthCard mazo 0)) -1 randomFn) mazo))
 
 
 ;; Tipo de Funcion: Modificador
@@ -244,3 +240,5 @@
           (cardsSet->string (cdr mazo))]))
 
 
+
+(cardsSet (list "A" "B" "C" "D" "F" "G" "H" "I" "J" "K" "L" "M" "N") 4 10 randomFn)
