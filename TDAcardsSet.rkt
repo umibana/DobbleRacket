@@ -189,12 +189,12 @@
 (define (dobble? mazo)
     (define (noRepite? mazo)
         (cond
-            [(= 1(length mazo)) "Valido"]
+            [(= 1(length mazo)) #t]
             [(= 1 (length(set-intersect (car mazo) (car(cdr mazo))))) (noRepite? (cdr mazo))]
-            [else "No valido"]))
+            [else #f]))
     (cond
      [(= (numCards mazo) (+ 1 (*(length (car mazo))  (- (length (car mazo)) 1)))) (noRepite? mazo)]
-     [else "Conjunto no valido"]))
+     [else #f]))
 
 
 ;; Tipo de Funcion: Otras Funciones
