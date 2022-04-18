@@ -16,6 +16,7 @@
 ;; ---------------------------------------------- Constructor CardsSet -----------------------------------------------------------------
 ;; Constructores
 ;;
+;; Tipo de Funcion: Constructor (parte de CardsSet)
 ;; Descripicion: Generar la primera carta del mazo
 ;; Dominio: Int
 ;; Recorrido: Lista
@@ -25,6 +26,7 @@
     [(= n 0) (list 1)]
     [(> n 0) (cons (+ n 1) (primeraCarta (- n 1)))]))
 
+;; Tipo de Funcion: Constructor (parte de CardsSet)
 ;; Descripcion: Segunda parte del algoritmo (Creacion de n Cartas)
 ;; Se crea una funcion nCartas y nCartas_j (Auxiliar) para la generacion de cartas
 ;; y la funcion nAlgoritmo para el algoritmo para que los simbolos no se repitan mas de una vez
@@ -49,6 +51,7 @@
     [(= i 1) (cons 1 (nCartas_j n i n))]
     [(> i 1) (cons (nCartas n (- i 1) j) (nCartas_j n i n))]))
 
+;; Tipo de Funcion: Constructor (parte de CardsSet)
 ;; Descripcion: Tercera parte del algoritmo (Creacion de n Cartas)
 ;; Se crean 4 funciones, n2cartas,n2cartas_j,n2cartas_j para la generacion de cartas
 ;; y la funcion n2Algoritmo para evitar que los simbolos se repitan
@@ -77,6 +80,7 @@
     [(> i 1) (cons (n2Cartas n (- i 1) n n) (n2Cartas_j n i n n))]))
 
 
+;; Tipo de Funcion: Constructor (parte de CardsSet)
 ;; Descripcion: Funcion para poder dejar todo el mazo en una sola lista
 ;; Dominio: Int
 ;; Recorrido: Lista
@@ -87,6 +91,7 @@
            (append(flatten(nCartas ordenPlano ordenPlano ordenPlano))
                   (flatten(n2Cartas ordenPlano ordenPlano ordenPlano ordenPlano))))))
 
+;; Tipo de Funcion: Constructor (parte de CardsSet)
 ;; Descripcion: Funcion para poder tomar la lista de carta
 ;; y separarlas segun el numero de simbolos por carta indicado
 ;; Dominio: Lista e int
@@ -97,6 +102,7 @@
     [(not (empty? mazo)) (cons (take mazo n) (ordenarEn (drop mazo n) n))]
     [else '()]))
 
+;; Tipo de Funcion: Constructor (parte de CardsSet)
 ;; Descripcion: Funcion que buscara un elemento en una lista y lo remplazara por el indicado
 ;; Dominio: String o Int, Lista
 ;; Recorrido: Lista
@@ -114,6 +120,7 @@
     [else (cons (car carta)
                 (remplazarCartas buscar remplazo (cdr carta)))]))
 
+;; Tipo de Funcion: Constructor (parte de CardsSet)
 ;; Descripcion: Tomara los simbolos indicados por el usuario y los pondra en el mazo generado
 ;; Dominio: String o int, lista de listas, int
 ;; Recorrido: Lista de listas
@@ -128,6 +135,7 @@
                            (remplazarCartas (+ i 1) (list-ref simbolos i) mazo)
                            (+ i 1))])))
 
+;; Tipo de Funcion: Constructor (parte de CardsSet)
 ;; Descripcion: Funcion para randomizar lugares de las cartas
 ;; Dominio: Funcion (randomFn) y lista de listas (cardsSet)
 ;; Recorrido: Lista de listas
@@ -181,20 +189,19 @@
 
 ;; Tipo de Funcion: Pertenencia
 ;; Descripcion: Funcion que verificara si el mazo dado es valido para jugar Dobble
-;;
-;; Dominio: Lista de listas
-;; Recorrido: string
+;; Dominio: Lista de listas (cardsSet)
+;; Recorrido: booleano
 ;; Tipo de Recursion: Recursion natural
 
 (define (dobble? mazo)
-    (define (noRepite? mazo)
-        (cond
-            [(= 1(length mazo)) #t]
-            [(= 1 (length(set-intersect (car mazo) (car(cdr mazo))))) (noRepite? (cdr mazo))]
-            [else #f]))
-    (cond
-     [(= (numCards mazo) (+ 1 (*(length (car mazo))  (- (length (car mazo)) 1)))) (noRepite? mazo)]
-     [else #f]))
+  (define (noRepite? mazo)
+   (cond
+       [(= 1(length mazo)) #t]
+       [(= 1 (length(set-intersect (car mazo) (car(cdr mazo))))) (noRepite? (cdr mazo))]
+       [else #f]))
+  (cond
+    [(= (numCards mazo) (+ 1 (*(length (car mazo))  (- (length (car mazo)) 1)))) (noRepite? mazo)]
+    [else #f]))
 
 
 ;; Tipo de Funcion: Otras Funciones
