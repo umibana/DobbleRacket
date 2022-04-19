@@ -1,0 +1,2 @@
+Ejemplos de funciones de ambos TDA estaran incluidas en archivo Dobble_20960400_VillarroelGonzalez.rkt
+Se incluyen 3 ejemplos de uso para cada funcion en ese archivo
