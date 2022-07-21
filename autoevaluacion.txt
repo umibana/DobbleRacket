@@ -1,0 +1,23 @@
+AUTOEVALUACION
+
+Función                      Evaluación
+TDA                                1
+cardsSet                           1
+dobble?                            1
+nthCard                            1
+numCards                           1
+findTotalCards                     1
+requiredElements                   1
+missingCards                      0.5
+cardsSet→string                   1
+game                               1
+stackMode                          1
+register                           1
+whoseTurnIsIt?                     0
+play                               0
+status                             0
+score                              0
+game→string                       0
+addCard                            0
+emptyHandsStackMode                0
+myMode                             0
